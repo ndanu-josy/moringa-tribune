@@ -1,44 +1,43 @@
 {%extends 'all-news/base.html'%}
+{% load static %}
 {% load bootstrap3 %}
 {% block content %}
-{{ block.super}}
-
+{{block.super}}
 <div class="container">
 
-  <!-- Looping through news   -->
-  {% for news_item in news %}
+    <!-- Looping through news   -->
+    {% for news_item in news %}
 
-  <div class="row">
-    <!-- displaying News articles -->
-    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-      <h2 class="text-center"> {{ news_item.title }} </h2>
+    <div class="row">
+        <!-- displaying News articles -->
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <h2 class="text-center"> {{ news_item.title }} </h2>
+            <h3>{{news_item.post}}</h3>
+        </div>
+        <!--Display news Article images  -->
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <img src="{{news_item.article_image.url}}" class="img-responsive" alt="Image">
+        </div>
     </div>
 
-    <!--Display news Article images  -->
-    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-      <img src="{{news_item.article_image.url}}" class="img-responsive" alt="Image">
+    {% empty %}
+    <div class="row">
+        <h2 class="text-center">There No News Items</h2>
     </div>
-  </div>
+    {% endfor %}
+    <div class="container-fluid">
 
-  {% empty %}
-  <div class="row">
-    <h2 class="text-center">There No News Items</h2>
-  </div>
-  {% endfor %}
-</div>
+        <form action="{%url 'newsToday'%}" method="post">
+            {%csrf_token%}
 
-<!-- Looping through news end   -->
-<div class="container">
-
-  <form action="{%url 'newsToday'%}" method="post">
-    {%csrf_token%}
-
-    {% for field in letterForm %}
+            {% for field in letterForm %}
             {% bootstrap_field field %}
             {% endfor %}
-    <input type="submit" value="Subscribe">
-  </form>
-
-</div>
-
-{% endblock %}
+            <input type="submit" value="Subscribe">
+        </form>
+    </div>
+    {% endblock %}
+    {% block scripts %}
+    {{block.super}}
+    <script type="text/javascript" src="{%static 'js/newsletter.js'%}"></script>
+    {% endblock %}
